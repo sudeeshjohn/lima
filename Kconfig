@@ -13,6 +13,13 @@ config GUESTAGENT_ARCH_X8664
 		Build lima-guestagent for "x86_64" Arch
 	default y
 
+config GUESTAGENT_ARCH_PPC64LE
+	bool "guestagent Arch: ppc64le"
+	help
+		Build lima-guestagent for "ppc64le" Arch
+	default y
+
+
 config GUESTAGENT_ARCH_AARCH64
 	bool "guestagent Arch: aarch64"
 	help

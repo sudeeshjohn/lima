@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"crypto/sha256"
 	"fmt"
+	"github.com/openshift/openshift-tests-private/test/extended/util/architecture"
 	"net"
 	"os"
 	"path/filepath"
@@ -190,6 +191,7 @@ func FillDefault(y, d, o *LimaYAML, filePath string) {
 		ARMV7L:  "cortex-a7",
 		// Since https://github.com/lima-vm/lima/pull/494, we use qemu64 cpu for better emulation of x86_64.
 		X8664:   "qemu64",
+		PPC64LE: "ppc64le",
 		RISCV64: "rv64", // FIXME: what is the right choice for riscv64?
 	}
 	for arch := range cpuType {
@@ -877,6 +879,8 @@ func NewArch(arch string) Arch {
 		return X8664
 	case "arm64":
 		return AARCH64
+	case "ppc64le":
+		return PPC64LE
 	case "arm":
 		arm := goarm()
 		if arm == 7 {
@@ -956,9 +960,10 @@ func HasMaxCPU() bool {
 func IsNativeArch(arch Arch) bool {
 	nativeX8664 := arch == X8664 && runtime.GOARCH == "amd64"
 	nativeAARCH64 := arch == AARCH64 && runtime.GOARCH == "arm64"
+	nativePPC64LE := arch == PPC64LE && runtime.GOARCH == "ppc64le"
 	nativeARMV7L := arch == ARMV7L && runtime.GOARCH == "arm" && goarm() == 7
 	nativeRISCV64 := arch == RISCV64 && runtime.GOARCH == "riscv64"
-	return nativeX8664 || nativeAARCH64 || nativeARMV7L || nativeRISCV64
+	return nativeX8664 || nativeAARCH64 || nativeARMV7L || nativeRISCV64 || nativePPC64LE
 }
 
 func unique(s []string) []string {

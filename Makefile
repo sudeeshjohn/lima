@@ -95,6 +95,10 @@ ifeq ($(CONFIG_GUESTAGENT_ARCH_AARCH64),y)
 GUESTAGENT += \
 	_output/share/lima/lima-guestagent.Linux-aarch64
 endif
+ifeq ($(CONFIG_GUESTAGENT_ARCH_PPC64LE),y)
+GUESTAGENT += \
+	_output/share/lima/lima-guestagent.Linux-ppc64le
+endif
 ifeq ($(CONFIG_GUESTAGENT_ARCH_ARMV7L),y)
 GUESTAGENT += \
 	_output/share/lima/lima-guestagent.Linux-armv7l
@@ -176,6 +180,11 @@ _output/share/lima/lima-guestagent.Linux-x86_64:
 .PHONY: _output/share/lima/lima-guestagent.Linux-aarch64
 _output/share/lima/lima-guestagent.Linux-aarch64:
 	GOOS=linux GOARCH=arm64 CGO_ENABLED=0 $(GO_BUILD) -o $@ ./cmd/lima-guestagent
+	chmod 644 $@
+
+.PHONY: _output/share/lima/lima-guestagent.Linux-ppc64le
+_output/share/lima/lima-guestagent.Linux-ppc64le:
+	GOOS=linux GOARCH=ppc64le CGO_ENABLED=0 $(GO_BUILD) -o $@ ./cmd/lima-guestagent
 	chmod 644 $@
 
 .PHONY: _output/share/lima/lima-guestagent.Linux-armv7l
@@ -260,18 +269,20 @@ generate:
 .PHONY: artifacts-darwin
 artifacts-darwin:
 	mkdir -p _artifacts
-	GOOS=darwin GOARCH=amd64 make clean binaries
-	$(TAR) -C _output/ -czvf _artifacts/lima-$(VERSION_TRIMMED)-Darwin-x86_64.tar.gz ./
+	GOOS=darwin GOARCH=ppc64le CC=ppc64le-linux-gnu-gcc make clean binaries
+	$(TAR) -C _output -czvf _artifacts/lima-$(VERSION_TRIMMED)-Linux-ppc64le.tar.gz ./
 	GOOS=darwin GOARCH=arm64 make clean binaries
 	$(TAR) -C _output -czvf _artifacts/lima-$(VERSION_TRIMMED)-Darwin-arm64.tar.gz ./
+
 
 .PHONY: artifacts-linux
 artifacts-linux:
 	mkdir -p _artifacts
-	GOOS=linux GOARCH=amd64 make clean binaries
-	$(TAR) -C _output/ -czvf _artifacts/lima-$(VERSION_TRIMMED)-Linux-x86_64.tar.gz ./
+	GOOS=linux GOARCH=ppc64le CC=ppc64le-linux-gnu-gcc make clean binaries
+	$(TAR) -C _output/ -czvf _artifacts/lima-$(VERSION_TRIMMED)-Linux-ppc64le.tar.gz ./
 	GOOS=linux GOARCH=arm64 CC=aarch64-linux-gnu-gcc make clean binaries
 	$(TAR) -C _output/ -czvf _artifacts/lima-$(VERSION_TRIMMED)-Linux-aarch64.tar.gz ./
+
 
 .PHONY: artifacts-windows
 artifacts-windows:

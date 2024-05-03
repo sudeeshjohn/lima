@@ -31,6 +31,8 @@ func TestFillDefault(t *testing.T) {
 		arch = X8664
 	case "arm64":
 		arch = AARCH64
+	case "ppc64le":
+		arch = PPC64LE
 	case "arm":
 		if runtime.GOOS != "linux" {
 			t.Skipf("unsupported GOOS: %s", runtime.GOOS)
@@ -303,6 +305,7 @@ func TestFillDefault(t *testing.T) {
 			ARMV7L:  "armhf",
 			X8664:   "amd64",
 			RISCV64: "riscv64",
+			PPC64LE: "ppc64le",
 		},
 		CPUs:   ptr.Of(7),
 		Memory: ptr.Of("5GiB"),
@@ -491,6 +494,7 @@ func TestFillDefault(t *testing.T) {
 			AARCH64: "uber-arm",
 			ARMV7L:  "armv8",
 			X8664:   "pentium",
+			PPC64LE:   "powerpc",
 			RISCV64: "sifive-u54",
 		},
 		CPUs:   ptr.Of(12),

@@ -58,6 +58,7 @@ const (
 	AARCH64 Arch = "aarch64"
 	ARMV7L  Arch = "armv7l"
 	RISCV64 Arch = "riscv64"
+	PPC64LE Arch = "ppc64le"
 
 	REVSSHFS MountType = "reverse-sshfs"
 	NINEP    MountType = "9p"
